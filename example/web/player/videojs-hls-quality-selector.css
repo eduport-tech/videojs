@@ -1,0 +1,20 @@
+/**
+ * videojs-hls-quality-selector
+ * @version 1.1.4
+ * @copyright 2020 Chris Boustead (chris@forgemotion.com)
+ * @license MIT
+ */
+.video-js.vjs-hls-quality-selector{display:block}
+.vjs-theme-fantasy {
+    --vjs-theme-fantasy--primary: red;
+    --vjs-theme-fantasy--secondary: #fff;
+}
+
+
+.vjs-playback-rate .vjs-playback-rate-value, .vjs-playback-rate>.vjs-menu-button {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
