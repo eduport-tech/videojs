@@ -2,5 +2,7 @@
     "cSpell.words": [
         "durationchange",
         "Fullscreen"
-    ]
+    ],
+    "dart.flutterSdkPath": "/Users/adarshps/.puro/envs/stable/flutter",
+    "dart.sdkPath": "/Users/adarshps/.puro/envs/stable/flutter/bin/cache/dart-sdk"
 }
