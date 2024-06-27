@@ -5,7 +5,7 @@ import 'package:video_js_themed/video_js.dart';
 
 const sourceUrl =
 //'https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8';
-    'https://stream.mux.com/LpFzctSre01DFbFOcalP01gLmcGjX8rS7ZnoKcBGTeeFs.m3u8';
+    'https://d357lqen3ahf81.cloudfront.net/transcoded/9ud5sfEqgec/video.m3u8';
 
 const sourceMediaType = 'application/x-mpegURL';
 
