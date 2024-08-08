@@ -1,0 +1,30 @@
+name: video_js_themed
+description: Video Library for Flutter, Easily use video.js in flutter web with themes support
+version: 0.0.6+4
+homepage: https://github.com/PROGrand/video_js
+issue_tracker: https://github.com/PROGrand/video_js/issues
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+  flutter: ">=2.5.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+
+  universal_html: ^2.0.8
+  video_player_platform_interface: ^6.2.2
+
+  plugin_platform_interface: ^2.1.2
+  js: ^0.6.7
+dev_dependencies:
+  flutter_lints: ^1.0.0
+
+flutter:
+  plugin:
+    platforms:
+      web:
+        pluginClass: ViewFactoryWeb
+        fileName: web/register_view_factory.dart
