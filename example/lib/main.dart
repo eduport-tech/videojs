@@ -1,11 +1,13 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:video_js_themed/video_js.dart';
 
 const sourceUrl =
+    'https://d357lqen3ahf81.cloudfront.net/transcoded/BkPat2jYRJT/video.m3u8';
 //'https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8';
-    'https://stream.mux.com/LpFzctSre01DFbFOcalP01gLmcGjX8rS7ZnoKcBGTeeFs.m3u8';
+// 'https://stream.mux.com/LpFzctSre01DFbFOcalP01gLmcGjX8rS7ZnoKcBGTeeFs.m3u8';
 
 const sourceMediaType = 'application/x-mpegURL';
 
@@ -61,7 +63,7 @@ class OptionsPageState extends State<OptionsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('videoJs Options'),
+        title: const Text('videoJs Options ${kIsWasm}'),
       ),
       body: ListView(
         children: [
@@ -333,9 +335,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   )
                 ],
               ),
-              const SizedBox(
-                height: 100,
-              ),
+              if (kIsWasm)
+                Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: const BoxDecoration(
+                      color: Colors.green,
+                    ),
+                    child: const Text('Running on Wasm')),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
