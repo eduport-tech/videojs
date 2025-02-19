@@ -1,12 +1,12 @@
 import 'dart:developer';
+import 'dart:js_interop';
 import 'dart:ui' as ui;
+import 'package:web/web.dart' as web;
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:universal_html/html.dart' as html;
 import 'package:video_js_themed/src/view_factory_plugin.dart';
 import 'package:video_js_themed/src/web/video_js_scripts.dart';
 
 class ViewFactoryWeb extends ViewFactoryPlugin {
-
   static final ViewFactoryWeb platform = ViewFactoryWeb._();
 
   static void registerWith(Registrar registrar) {
@@ -28,29 +28,32 @@ class ViewFactoryWeb extends ViewFactoryPlugin {
     // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(elementId, (int id) {
       log('8989 player id $playerId');
-      final html.Element htmlElement = html.DivElement()
-        ..id = 'div$elementId'
-        ..style.width = '100%'
-        ..style.height = '100%'
-        ..children = [
-          html.VideoElement()
-            ..id = playerId
-          // ..style.minHeight = '100%'
-          // ..style.minHeight = '100%'
-          // ..style.width = '100%'
-          // ..style.height = 'auto'
-            ..className = 'video-js $theme'
-            ..width = width.toInt()
-            ..height = height.toInt(),
-          html.ScriptElement()
-            ..innerHtml = VideoJsScripts().videojsCode(
+
+      final videoElement = web.HTMLVideoElement()
+        ..id = playerId
+        ..className = 'video-js $theme'
+        ..width = width.toInt()
+        ..height = height.toInt();
+      final scriptElement = web.document.createElement('script')
+        ..innerHTML = VideoJsScripts()
+            .videojsCode(
               playerId,
               videoJsOptions,
               qualitySelector: qualitySelector,
             )
-        ];
+            .toJS;
+      final web.Element htmlElement =
+          (web.document.createElement('div') as web.HTMLElement)
+            ..id = 'div$elementId'
+            ..style.width = '100%'
+            ..style.height = '100%'
+            ..appendChild(
+              videoElement,
+            )
+            ..appendChild(
+              scriptElement,
+            );
 
-    
       return htmlElement;
     });
   }

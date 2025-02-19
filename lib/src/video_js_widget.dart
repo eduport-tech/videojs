@@ -1,8 +1,7 @@
 import 'dart:math';
-
+import 'package:web/web.dart' as web;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb;
-import 'package:universal_html/html.dart' as html;
 import 'package:video_js_themed/src/view_factory_plugin.dart';
 import 'package:video_js_themed/video_js.dart';
 
@@ -30,8 +29,8 @@ class VideoJsWidgetState extends State<VideoJsWidget> {
   @override
   void dispose() {
     widget.videoJsController.dispose();
-    html.Element? ele = html.querySelector('#div$elementId');
-    if (html.querySelector('#div$elementId') != null) {
+    web.Element? ele = web.document.querySelector('#div$elementId');
+    if (web.document.querySelector('#div$elementId') != null) {
       ele!.remove();
     }
 
