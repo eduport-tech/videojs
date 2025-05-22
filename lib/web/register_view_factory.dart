@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'dart:js_interop';
-import 'dart:ui' as ui;
+import 'dart:ui_web' as ui;
 import 'package:web/web.dart' as web;
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:video_js_themed/src/view_factory_plugin.dart';

@@ -48,3 +48,6 @@ app.*.map.json
 # Example related
 /example/build
 /example/lib/generated_plugin_registrant.dart
+
+# FVM Version Cache
+.fvm/

@@ -1,8 +1,8 @@
 {
-    "cSpell.words": [
-        "durationchange",
-        "Fullscreen"
-    ],
-    "dart.flutterSdkPath": "/Users/adarshps/.puro/envs/_29/flutter",
-    "dart.sdkPath": "/Users/adarshps/.puro/envs/_29/flutter/bin/cache/dart-sdk"
+  "cSpell.words": [
+    "durationchange",
+    "Fullscreen"
+  ],
+  "dart.flutterSdkPath": ".fvm/versions/3.32.0",
+  "dart.sdkPath": "/Users/adarshps/.puro/envs/_29/flutter/bin/cache/dart-sdk"
 }
