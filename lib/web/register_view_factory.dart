@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:js_interop';
 import 'dart:ui_web' as ui;
+import 'package:video_js_themed/video_js.dart';
 import 'package:web/web.dart' as web;
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:video_js_themed/src/view_factory_plugin.dart';
@@ -23,7 +24,7 @@ class ViewFactoryWeb extends ViewFactoryPlugin {
     required double width,
     required double height,
     required bool qualitySelector,
-    required Map<String, dynamic> videoJsOptions,
+     VideoJsOptions ?videoJsOptions,
   }) {
     // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(elementId, (int id) {

@@ -1,13 +1,17 @@
+import 'package:video_js_themed/video_js.dart';
+
 class VideoJsScripts {
   String videojsCode(
     String playerId,
-    Map<String, dynamic>? options, {
+    VideoJsOptions? options, {
     bool qualitySelector = false,
 
   }) {
-    double startAt = options?['startTime'] ?? 0;
+
+    double startAt = options?.startAt?.toDouble() ?? 0;
+   final jsonOption = options?.toJson();
     return """
-    var player = videojs('$playerId', $options,function() {
+    var player = videojs('$playerId', $jsonOption,function() {
     player.currentTime($startAt);
     callBackToDartSide('$playerId', 'onReady' , 'true');
     });

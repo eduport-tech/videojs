@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+import 'package:video_js_themed/video_js.dart';
 
 abstract class ViewFactoryPlugin extends PlatformInterface {
   ViewFactoryPlugin() : super(token: _token);
@@ -29,6 +30,6 @@ abstract class ViewFactoryPlugin extends PlatformInterface {
     required double width,
     required double height,
     required bool qualitySelector,
-    required Map<String, dynamic> videoJsOptions,
+     VideoJsOptions ? videoJsOptions,
   });
 }

@@ -24,7 +24,7 @@ class VideoJsController {
     scriptElement..id =
      "videojs"
       ..text =
-          VideoJsScripts().videojsCode(playerId, videoJsOptions!.toJson());
+          VideoJsScripts().videojsCode(playerId, videoJsOptions);
     web.Element? ele =web.document.querySelector("#videojs");
     if (web.document.querySelector("#videojs") != null) {
       ele!.remove();

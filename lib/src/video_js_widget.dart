@@ -55,7 +55,7 @@ class VideoJsWidgetState extends State<VideoJsWidget> {
         height: widget.height,
         qualitySelector: widget.videoJsController.qualitySelector,
         videoJsOptions:
-            getVideoJsOptions(widget.videoJsController.videoJsOptions),
+           widget.videoJsController.videoJsOptions,
       );
     }
   }
