@@ -571,7 +571,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ElevatedButton(
                           style: btnStyle,
                       onPressed: () {
-                        videoJsController.isFullScreen((val) {
+                        videoJsController.isFullScreen().then((val) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               duration: const Duration(milliseconds: 500),
                               content: Text(

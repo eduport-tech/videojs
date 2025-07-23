@@ -117,7 +117,8 @@ class VideoJsController {
   }
 
   /// this function is for check video player full screen status
-  isFullScreen(Function(String) onFullScreenStatus) {
+  Future<bool> isFullScreen() {
+    final Completer<bool> completer = Completer<bool>();
     final web.HTMLScriptElement scriptElement = web.HTMLScriptElement()
       ..id = "isFullScreen"
       ..text = VideoJsScripts().isFullScreen(playerId);
@@ -127,7 +128,12 @@ class VideoJsController {
     }
     web.document.querySelector('body')!.appendChild(scriptElement);
     VideoJsResults()
-        .listenToValueFromJs(playerId, 'isFull', onFullScreenStatus);
+        .listenToValueFromJs(playerId, 'isFull', (String result) {
+          if (!completer.isCompleted) {
+            completer.complete(result == 'true');
+          }
+        });
+    return completer.future;
   }
 
   /// To change player to full screen mode
