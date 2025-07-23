@@ -638,7 +638,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ElevatedButton(
                           style: btnStyle,
                       onPressed: () {
-                        videoJsController.durationTime((val) {
+                        videoJsController.durationTime().then((val) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               duration: const Duration(milliseconds: 500),
                               content: Text(
@@ -663,7 +663,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ElevatedButton(
                           style: btnStyle,
                       onPressed: () {
-                        videoJsController.remainTime((val) {
+                        videoJsController.remainTime().then((val) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               duration: const Duration(milliseconds: 500),
                               content: Text(
@@ -682,7 +682,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ElevatedButton(
                           style: btnStyle,
                       onPressed: () {
-                        videoJsController.bufferPercent((val) {
+                        videoJsController.bufferPercent().then((val) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               duration: const Duration(milliseconds: 500),
                               content: Text(

@@ -237,7 +237,8 @@ class VideoJsController {
   }
 
   /// Video whole time in seconds
-  durationTime(Function(String) onDurationTime) {
+  Future<int> durationTime() {
+    final Completer<int> completer = Completer<int>();
     final web.HTMLScriptElement scriptElement = web.HTMLScriptElement()
       ..id = "durationTime"
       ..text = VideoJsScripts().duration(playerId);
@@ -247,11 +248,17 @@ class VideoJsController {
     }
     web.document.querySelector('body')!.appendChild(scriptElement);
     VideoJsResults()
-        .listenToValueFromJs(playerId, 'getDuration', onDurationTime);
+        .listenToValueFromJs(playerId, 'getDuration', (String result) {
+          if (!completer.isCompleted) {
+            completer.complete((double.tryParse(result)??0).toInt());
+          }
+        });
+    return completer.future;
   }
 
   /// Video remain time in seconds
-  remainTime(Function(String) onRemainTime) {
+  Future<int> remainTime() {
+    final Completer<int> completer = Completer<int>();
     final web.HTMLScriptElement scriptElement = web.HTMLScriptElement()
       ..id = "onRemainTime"
       ..text = VideoJsScripts().remainingTime(playerId);
@@ -261,11 +268,17 @@ class VideoJsController {
     }
     web.document.querySelector('body')!.appendChild(scriptElement);
     VideoJsResults()
-        .listenToValueFromJs(playerId, 'getRemaining', onRemainTime);
+        .listenToValueFromJs(playerId, 'getRemaining', (String result) {
+          if (!completer.isCompleted) {
+            completer.complete((double.tryParse(result)??0).toInt());
+          }
+        });
+    return completer.future;
   }
 
   /// Video buffered ( downloaded ) percent
-  bufferPercent(Function(String) onBufferPercent) {
+  Future<double> bufferPercent() {
+    final Completer<double> completer = Completer<double>();
     final web.HTMLScriptElement scriptElement = web.HTMLScriptElement()
       ..id = "bufferPercent"
       ..text = VideoJsScripts().bufferedPercent(playerId);
@@ -275,7 +288,12 @@ class VideoJsController {
     }
     web.document.querySelector('body')!.appendChild(scriptElement);
     VideoJsResults()
-        .listenToValueFromJs(playerId, 'getBuffered', onBufferPercent);
+        .listenToValueFromJs(playerId, 'getBuffered', (String result) {
+          if (!completer.isCompleted) {
+            completer.complete((double.tryParse(result)??0));
+          }
+        });
+    return completer.future;
   }
 
   /// Set Video poster/thumbnail
