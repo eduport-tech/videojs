@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:video_js_themed/src/models/videojs_options.dart';
@@ -19,30 +20,30 @@ class VideoJsController {
 
   /// This function is for initial a video.js instance with options
   videoJs(Function(String) onReady, {VideoJsOptions? videoJsOptions}) {
-    final web.Element scriptElement = web.document.createElement('script');
+    final web.HTMLScriptElement scriptElement = web.HTMLScriptElement();
     scriptElement..id =
      "videojs"
-      ..innerHTML =
-          VideoJsScripts().videojsCode(playerId, videoJsOptions!.toJson()).toJS;
+      ..text =
+          VideoJsScripts().videojsCode(playerId, videoJsOptions!.toJson());
     web.Element? ele =web.document.querySelector("#videojs");
     if (web.document.querySelector("#videojs") != null) {
       ele!.remove();
     }
-    web.document.querySelector('body')!.children.add(scriptElement);
+    web.document.querySelector('body')!.appendChild(scriptElement);
     VideoJsResults().listenToValueFromJs(playerId, 'onReady', onReady);
   }
 
   /// to set video source by type
   /// [type] can be video/mp4, video/webm, application/x-mpegURL (for hls videos), ...
   setSRC(String src, {required String type}) {
-    final web.Element scriptElement = web.document.createElement('script')
+    final web.HTMLScriptElement scriptElement = web.HTMLScriptElement()
       ..id = "setSRC"
-      ..innerHTML = VideoJsScripts().setSRCCode(playerId, src, type).toJS;
+      ..text = VideoJsScripts().setSRCCode(playerId, src, type);
     web.Element? ele = web.document.querySelector("#setSRC");
     if (web.document.querySelector("#setSRC") != null) {
       ele!.remove();
     }
-    web.document.querySelector('body')!.children.add(scriptElement);
+    web.document.querySelector('body')!.appendChild(scriptElement);
   }
 
   /// To get volume of video
@@ -54,7 +55,7 @@ class VideoJsController {
     if (web.document.querySelector("#getVolume") != null) {
       ele!.remove();
     }
-    web.document.querySelector('body')!.children.add(scriptElement);
+    web.document.querySelector('body')!.appendChild(scriptElement);
     VideoJsResults()
         .listenToValueFromJs(playerId, 'getVolume', onVolumeReceive);
   }
@@ -68,307 +69,298 @@ class VideoJsController {
     if (web.document.querySelector("#setVolume") != null) {
       ele!.remove();
     }
-    web.document.querySelector('body')!.children.add(scriptElement);
+    web.document.querySelector('body')!.appendChild(scriptElement);
   }
 
   /// toggle mute in video player. if player is mute, makes unmute and if is unmute makes mute
   toggleMute() {
-    final web.Element scriptElement = web.document.createElement('script')
+    final web.HTMLScriptElement scriptElement = web.HTMLScriptElement()
       ..id = "toggleMute"
-      ..innerHTML = VideoJsScripts().toggleMute(playerId).toJS;
+      ..text = VideoJsScripts().toggleMute(playerId);
     web.Element? ele = web.document.querySelector("#toggleMute");
     if (web.document.querySelector("#toggleMute") != null) {
       ele!.remove();
     }
-    web.document.querySelector('body')!.children.add(scriptElement);
+    web.document.querySelector('body')!.append(scriptElement);
   }
 
   /// this function is for check video player mute status
-  isMute(Function(String) onMuteStatus) {
-    final web.Element scriptElement = web.document.createElement('script')
+  Future<bool> isMute() {
+    final Completer<bool> completer = Completer<bool>();
+    final web.HTMLScriptElement scriptElement = web.HTMLScriptElement()
       ..id = "isMute"
-      ..innerHTML = VideoJsScripts().isMute(playerId).toJS;
+      ..text = VideoJsScripts().isMute(playerId);
     web.Element? ele = web.document.querySelector("#isMute");
     if (web.document.querySelector("#isMute") != null) {
       ele!.remove();
     }
-    web.document.querySelector('body')!.children.add(scriptElement);
-    VideoJsResults().listenToValueFromJs(playerId, 'isMute', onMuteStatus);
+    web.document.querySelector('body')!.appendChild(scriptElement);
+    VideoJsResults().listenToValueFromJs(playerId, 'isMute', (String result) {
+      if (!completer.isCompleted) {
+        completer.complete(result == 'true');
+      }
+    });
+    return completer.future;
   }
 
   /// toggle full screen in video player. this function is different with requestFullScreen,
   /// this function just change type
   toggleFullScreen() {
-    final web.Element scriptElement = web.document.createElement('script')
+    final web.HTMLScriptElement scriptElement = web.HTMLScriptElement()
       ..id = "toggleFullScreen"
-      ..innerHTML = VideoJsScripts().toggleFullScreenMode(playerId).toJS;
+      ..text = VideoJsScripts().toggleFullScreenMode(playerId);
     web.Element? ele = web.document.querySelector("#toggleFullScreen");
-    if (web.document.querySelector("#toggleFullScreen") != null) {
-      ele!.remove();
+    if (ele != null) {
+      ele.remove();
     }
-    web.document.querySelector('body')!.children.add(scriptElement);
+    web.document.querySelector('body')!.appendChild(scriptElement);
   }
 
   /// this function is for check video player full screen status
   isFullScreen(Function(String) onFullScreenStatus) {
-    final web.Element scriptElement = web.document.createElement('script')
+    final web.HTMLScriptElement scriptElement = web.HTMLScriptElement()
       ..id = "isFullScreen"
-      ..innerHTML = VideoJsScripts().isFullScreen(playerId).toJS;
+      ..text = VideoJsScripts().isFullScreen(playerId);
     web.Element? ele = web.document.querySelector("#isFullScreen");
-    if (web.document.querySelector("#isFullScreen") != null) {
-      ele!.remove();
+    if (ele != null) {
+      ele.remove();
     }
-    web.document.querySelector('body')!.children.add(scriptElement);
+    web.document.querySelector('body')!.appendChild(scriptElement);
     VideoJsResults()
         .listenToValueFromJs(playerId, 'isFull', onFullScreenStatus);
   }
 
   /// To change player to full screen mode
   requestFullScreen() {
-    final web.Element scriptElement = web.document.createElement('script')
+    final web.HTMLScriptElement scriptElement = web.HTMLScriptElement()
       ..id = "requestFullScreen"
-      ..innerHTML = VideoJsScripts().requestFullscreen(playerId).toJS;
+      ..text = VideoJsScripts().requestFullscreen(playerId);
     web.Element? ele = web.document.querySelector("#requestFullScreen");
-    if (web.document.querySelector("#requestFullScreen") != null) {
-      ele!.remove();
+    if (ele != null) {
+      ele.remove();
     }
-    web.document.querySelector('body')!.children.add(scriptElement);
+    web.document.querySelector('body')!.appendChild(scriptElement);
   }
 
   /// To exit from full screen mode
   exitFullScreen() {
-    final web.Element scriptElement = web.document.createElement('script')
+    final web.HTMLScriptElement scriptElement = web.HTMLScriptElement()
       ..id = "exitFullScreen"
-      ..innerHTML = VideoJsScripts().exitFullscreen(playerId).toJS;
+      ..text = VideoJsScripts().exitFullscreen(playerId);
     web.Element? ele = web.document.querySelector("#exitFullScreen");
-    if (web.document.querySelector("#exitFullScreen") != null) {
-      ele!.remove();
+    if (ele != null) {
+      ele.remove();
     }
-    web.document.querySelector('body')!.children.add(scriptElement);
+    web.document.querySelector('body')!.appendChild(scriptElement);
   }
 
   /// play video
-  play() {
-    final web.Element scriptElement = web.document.createElement('script')
-      ..id = "play"
-      ..innerHTML = VideoJsScripts().play(playerId).toJS;
-    web.Element? ele = web.document.querySelector("#play");
-    if (web.document.querySelector("#play") != null) {
-      ele!.remove();
-    }
-    web.document.querySelector('body')!.children.add(scriptElement);
+ play() {
+  final web.HTMLScriptElement scriptElement = web.HTMLScriptElement()
+    ..id = "play"
+    ..text = VideoJsScripts().play(playerId);
+
+  
+  web.Element? ele = web.document.querySelector("#play");
+  if (ele != null) {
+    ele.remove();
   }
+  
+  web.document.querySelector('body')!.appendChild(scriptElement);
+}
 
   /// pause video
   pause() {
-    final web.Element scriptElement = web.document.createElement('script')
+    final web.HTMLScriptElement scriptElement =  web.HTMLScriptElement()
       ..id = "pause"
-      ..innerHTML = VideoJsScripts().pause(playerId).toJS;
+      ..text = VideoJsScripts().pause(playerId);
     web.Element? ele = web.document.querySelector("#pause");
-    if (web.document.querySelector("#pause") != null) {
-      ele!.remove();
+    if (ele != null) {
+      ele.remove();
     }
-    web.document.querySelector('body')!.children.add(scriptElement);
+    web.document.querySelector('body')!.appendChild(scriptElement);
   }
 
-  /// To check video player pause status
-  isPaused(Function(String) onPauseStatus) {
-    final web.Element scriptElement = web.document.createElement('script')
-      ..id = "isPaused"
-      ..innerHTML = VideoJsScripts().isPause(playerId).toJS;
-    web.Element? ele = web.document.querySelector("#isPaused");
-    if (web.document.querySelector("#isPaused") != null) {
-      ele!.remove();
-    }
-    web.document.querySelector('body')!.children.add(scriptElement);
-    VideoJsResults().listenToValueFromJs(playerId, 'isPaused', onPauseStatus);
+
+  Future<String> isPaused() {
+  final Completer<String> completer = Completer<String>();
+  
+  final web.HTMLScriptElement scriptElement = web.HTMLScriptElement()
+    ..id = "isPaused"
+    ..text = VideoJsScripts().isPause(playerId);
+  
+  web.Element? ele = web.document.querySelector("#isPaused");
+  if (ele != null) {
+    ele.remove();
   }
+  
+  web.document.querySelector('body')!.appendChild(scriptElement);
+  
+  VideoJsResults().listenToValueFromJs(playerId, 'isPaused', (String result) {
+    if (!completer.isCompleted) {
+      completer.complete(result);
+    }
+  });
+  
+  return completer.future;
+}
 
   /// To get video's current playing time in seconds
-  currentTime(Function(String) onCurrentTime) {
-    final web.Element scriptElement = web.document.createElement('script')
+ Future<int> currentTime() {
+       final Completer<int> completer = Completer<int>();
+    final web.HTMLScriptElement scriptElement = web.HTMLScriptElement()
       ..id = "currentTime"
-      ..innerHTML = VideoJsScripts().getCurrentTime(playerId).toJS;
+      ..text = VideoJsScripts().getCurrentTime(playerId);
     web.Element? ele = web.document.querySelector("#currentTime");
-    if (web.document.querySelector("#currentTime") != null) {
-      ele!.remove();
+    if (ele != null) {
+      ele.remove();
     }
-    web.document.querySelector('body')!.children.add(scriptElement);
-    VideoJsResults().listenToValueFromJs(playerId, 'getCurrent', onCurrentTime);
+    web.document.querySelector('body')!.appendChild(scriptElement);
+    VideoJsResults().listenToValueFromJs(playerId, 'getCurrent', (String result) {
+      if (!completer.isCompleted) {
+        completer.complete((double.tryParse(result)??0).toInt());
+      }
+    });
+    return completer.future;
   }
 
   /// Set video
   setCurrentTime(String currentTime) {
-    final web.Element scriptElement = web.document.createElement('script')
+    final web.HTMLScriptElement scriptElement = web.HTMLScriptElement()
       ..id = "setCurrentTime"
-      ..innerHTML = VideoJsScripts().setCurrentTime(playerId, currentTime).toJS;
+      ..text = VideoJsScripts().setCurrentTime(playerId, currentTime);
     web.Element? ele = web.document.querySelector("#setCurrentTime");
-    if (web.document.querySelector("#setCurrentTime") != null) {
-      ele!.remove();
+    if (ele != null) {
+      ele.remove();
     }
-    web.document.querySelector('body')!.children.add(scriptElement);
+    web.document.querySelector('body')!.appendChild(scriptElement);
   }
 
   /// Video whole time in seconds
   durationTime(Function(String) onDurationTime) {
-    final web.Element scriptElement = web.document.createElement('script')
+    final web.HTMLScriptElement scriptElement = web.HTMLScriptElement()
       ..id = "durationTime"
-      ..innerHTML = VideoJsScripts().duration(playerId).toJS;
+      ..text = VideoJsScripts().duration(playerId);
     web.Element? ele = web.document.querySelector("#durationTime");
-    if (web.document.querySelector("#durationTime") != null) {
-      ele!.remove();
+    if (ele != null) {
+      ele.remove();
     }
-    web.document.querySelector('body')!.children.add(scriptElement);
+    web.document.querySelector('body')!.appendChild(scriptElement);
     VideoJsResults()
         .listenToValueFromJs(playerId, 'getDuration', onDurationTime);
   }
 
   /// Video remain time in seconds
   remainTime(Function(String) onRemainTime) {
-    final web.Element scriptElement = web.document.createElement('script')
+    final web.HTMLScriptElement scriptElement = web.HTMLScriptElement()
       ..id = "onRemainTime"
-      ..innerHTML = VideoJsScripts().remainingTime(playerId).toJS;
+      ..text = VideoJsScripts().remainingTime(playerId);
     web.Element? ele = web.document.querySelector("#onRemainTime");
-    if (web.document.querySelector("#onRemainTime") != null) {
-      ele!.remove();
+    if (ele != null) {
+      ele.remove();
     }
-    web.document.querySelector('body')!.children.add(scriptElement);
+    web.document.querySelector('body')!.appendChild(scriptElement);
     VideoJsResults()
         .listenToValueFromJs(playerId, 'getRemaining', onRemainTime);
   }
 
   /// Video buffered ( downloaded ) percent
   bufferPercent(Function(String) onBufferPercent) {
-    final web.Element scriptElement = web.document.createElement('script')
+    final web.HTMLScriptElement scriptElement = web.HTMLScriptElement()
       ..id = "bufferPercent"
-      ..innerHTML = VideoJsScripts().bufferedPercent(playerId).toJS;
+      ..text = VideoJsScripts().bufferedPercent(playerId);
     web.Element? ele = web.document.querySelector("#bufferPercent");
-    if (web.document.querySelector("#bufferPercent") != null) {
-      ele!.remove();
+    if (ele != null) {
+      ele.remove();
     }
-    web.document.querySelector('body')!.children.add(scriptElement);
+    web.document.querySelector('body')!.appendChild(scriptElement);
     VideoJsResults()
         .listenToValueFromJs(playerId, 'getBuffered', onBufferPercent);
   }
 
   /// Set Video poster/thumbnail
   setPoster(String poster) {
-    final web.Element scriptElement = web.document.createElement('script')
+    final web.HTMLScriptElement scriptElement = web.HTMLScriptElement()
       ..id = "setPoster"
-      ..innerHTML = VideoJsScripts().setPoster(playerId, poster).toJS;
+      ..text = VideoJsScripts().setPoster(playerId, poster);
     web.Element? ele = web.document.querySelector("#setPoster");
-    if (web.document.querySelector("#setPoster") != null) {
-      ele!.remove();
+    if (ele != null) {
+      ele.remove();
     }
-    web.document.querySelector('body')!.children.add(scriptElement);
+    web.document.querySelector('body')!.appendChild(scriptElement);
   }
 
   /// Get Video poster/thumbnail
   getPoster(Function(String) onPosterGet) {
-    final web.Element scriptElement = web.document.createElement('script')
+    final web.HTMLScriptElement scriptElement = web.HTMLScriptElement()
       ..id = "getPoster"
-      ..innerHTML = VideoJsScripts().getPoster(playerId).toJS;
+      ..text = VideoJsScripts().getPoster(playerId);
     web.Element? ele = web.document.querySelector("#getPoster");
-    if (web.document.querySelector("#getPoster") != null) {
-      ele!.remove();
+    if (ele != null) {
+      ele.remove();
     }
-    web.document.querySelector('body')!.children.add(scriptElement);
+    web.document.querySelector('body')!.appendChild(scriptElement);
     VideoJsResults().listenToValueFromJs(playerId, 'getPoster', onPosterGet);
   }
 
   /// Get Video poster/thumbnail
   onPlayerReady(Function(String) onReady) {
-    final web.Element scriptElement = web.document.createElement('script')
+    final web.HTMLScriptElement scriptElement = web.HTMLScriptElement()
       ..id = "onPlayerReady"
-      ..innerHTML = VideoJsScripts().getPoster(playerId).toJS;
+      ..text = VideoJsScripts().getPoster(playerId);
     web.Element? ele = web.document.querySelector("#onPlayerReady");
-    if (web.document.querySelector("#onPlayerReady") != null) {
-      ele!.remove();
+    if (ele != null) {
+      ele.remove();
     }
-    web.document.querySelector('body')!.children.add(scriptElement);
+    web.document.querySelector('body')!.appendChild(scriptElement);
     VideoJsResults().listenToValueFromJs(playerId, 'onReady', onReady);
   }
 
   /// Add callback to be triggered on playback start
   onPlay(Function(String) onPlay) {
-    final web.Element scriptElement = web.document.createElement('script')
+    final web.HTMLScriptElement scriptElement = web.HTMLScriptElement()
       ..id = "onPlay"
-      ..innerHTML = VideoJsScripts().onPlay(playerId).toJS;
+      ..text = VideoJsScripts().onPlay(playerId);
     web.Element? ele = web.document.querySelector("#onPlay");
-    if (web.document.querySelector("#onPlay") != null) {
-      ele!.remove();
+    if (ele != null) {
+      ele.remove();
     }
-    web.document.querySelector('body')!.children.add(scriptElement);
+    web.document.querySelector('body')!.appendChild(scriptElement);
     VideoJsResults().listenToValueFromJs(playerId, 'onPlay', onPlay);
   }
 
   /// Add callback to be triggered on playback end
   onEnd(Function(String) onEnd) {
-    final web.Element scriptElement = web.document.createElement('script')
+    final web.HTMLScriptElement scriptElement = web.HTMLScriptElement()
       ..id = "onEnd"
-      ..innerHTML = VideoJsScripts().onEnd(playerId).toJS;
+      ..text = VideoJsScripts().onEnd(playerId);
     web.Element? ele = web.document.querySelector("#onEnd");
-    if (web.document.querySelector("#onEnd") != null) {
-      ele!.remove();
+    if (ele != null) {
+      ele.remove();
     }
-    web.document.querySelector('body')!.children.add(scriptElement);
+    web.document.querySelector('body')!.appendChild(scriptElement);
     VideoJsResults().listenToValueFromJs(playerId, 'onEnd', onEnd);
   }
 
   /// This method is available on all Video.js players and components.
   /// It is the only supported method of removing a Video.js player from both the DOM and memory.
   dispose() {
-    final web.Element scriptElement = web.document.createElement('script')
+    final web.HTMLScriptElement scriptElement = web.HTMLScriptElement()
       ..id = "dispose"
-      ..innerHTML = VideoJsScripts().dispose(playerId).toJS;
+      ..text = VideoJsScripts().dispose(playerId);
     web.Element? ele = web.document.querySelector("#dispose");
-    if (web.document.querySelector("#dispose") != null) {
-      ele!.remove();
+    if (ele != null) {
+      ele.remove();
     }
-    web.document.querySelector('body')!.children.add(scriptElement);
+    web.document.querySelector('body')!.appendChild(scriptElement);
 
     if (kDebugMode) {
       print('VideoJsController disposed');
     }
   }
 
-  ///-------------v2----------------------------
 
-  int totalDurationInSec() {
-    final player = Videojs.getPlayer(playerId);
-    double duration = (player?.duration() ?? 0);
-    log('duration is $duration');
 
-    return (duration.isNaN || duration.isInfinite) ? 0 : duration.toInt();
-  }
+ 
 
-  Future<int> currentPositionInSec() async {
-    final player = Videojs.getPlayer(playerId);
-
-    double? currentTime = player?.currentTime();
-
-    int duration = (currentTime ?? 0).toInt();
-
-    return duration.isNaN ? 0 : duration;
-  }
-
-  ///indicates the player is in full screen or not true -> fullScreen , false ->not in fullScreen
-  Future<bool> isFullscreen() async {
-    final player = Videojs.getPlayer(playerId);
-    return player?.isFullscreen() ?? false;
-  }
-
-  Future<void> setTime(int timeInSec) async {
-    final player = Videojs.getPlayer(playerId);
-
-    player?.currentTime(timeInSec);
-  }
-
-  onEvent() {
-
-    final player = Videojs.getPlayer(playerId);
-    // player?.on('play',allowInterop((){
-
-    // }));
-  }
 }

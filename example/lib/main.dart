@@ -229,6 +229,7 @@ class OptionsPageState extends State<OptionsPage> {
             height: 30,
           ),
           ElevatedButton(
+         
               onPressed: () {
                 Navigator.push(
                   context,
@@ -305,12 +306,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void dispose() {
-    videoJsController.dispose();
+    // videoJsController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    const btnStyle = ButtonStyle(
+        backgroundColor: WidgetStatePropertyAll(Colors.black));
     return Scaffold(
         appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
@@ -369,8 +372,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     width: 15,
                   ),
                   ElevatedButton(
+                      style: btnStyle,
                       onPressed: () {
-                        log('total ${videoJsController.totalDurationInSec()}  ');
+                        
 
                         //[type] can be video/mp4, video/webm, application/x-mpegURL (for hls videos) , ...
                         videoJsController.setSRC(
@@ -391,6 +395,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
+                          style: btnStyle,
                       onPressed: () {
                         videoJsController.dispose();
                       },
@@ -402,6 +407,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     width: 5,
                   ),
                   ElevatedButton(
+                          style: btnStyle,
                       onPressed: () {
                         videoJsController.play();
                       },
@@ -413,6 +419,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     width: 5,
                   ),
                   ElevatedButton(
+                          style: btnStyle,
                       onPressed: () {
                         videoJsController.pause();
                       },
@@ -424,8 +431,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     width: 5,
                   ),
                   ElevatedButton(
+                          style: btnStyle,
                       onPressed: () {
-                        videoJsController.isPaused((val) {
+                        videoJsController.isPaused().then((val) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               duration: const Duration(milliseconds: 500),
                               content: Text(
@@ -442,22 +450,29 @@ class _MyHomePageState extends State<MyHomePage> {
                     width: 5,
                   ),
                   ElevatedButton(
+                          style: btnStyle,
                       onPressed: () async {
-                        final time =
-                            await videoJsController.currentPositionInSec();
-                        log('current time -->${time}');
+                        videoJsController.currentTime().then((val) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              duration: const Duration(milliseconds: 500),
+                              content: Text(
+                                'Current time : $val',
+                                style: const TextStyle(color: Colors.red),
+                              )));
+                        });
                       },
                       child: const Text(
                         'Current video time',
                         style: TextStyle(color: Colors.white),
                       )),
                   ElevatedButton(
+                          style: btnStyle,
                       onPressed: () async {
-                        videoJsController.onEvent();
+                       
                       },
                       child: const Text(
                         'event',
-                        style: TextStyle(color: Colors.black),
+                        style: TextStyle(color: Colors.white),
                       )),
                 ],
               ),
@@ -469,6 +484,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
+                          style: btnStyle,
                       onPressed: () {
                         videoJsController.getVolume((val) =>
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -486,6 +502,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     width: 5,
                   ),
                   ElevatedButton(
+                          style: btnStyle,
                       onPressed: () {
                         videoJsController.setVolume('0.5');
                       },
@@ -503,6 +520,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
+                          style: btnStyle,
                       onPressed: () {
                         videoJsController.toggleMute();
                       },
@@ -514,8 +532,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     width: 5,
                   ),
                   ElevatedButton(
+                          style: btnStyle,
                       onPressed: () {
-                        videoJsController.isMute((val) {
+                        videoJsController.isMute().then((val) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               duration: const Duration(milliseconds: 500),
                               content: Text(
@@ -538,6 +557,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
+                          style: btnStyle,
                       onPressed: () {
                         videoJsController.toggleFullScreen();
                       },
@@ -549,6 +569,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     width: 5,
                   ),
                   ElevatedButton(
+                          style: btnStyle,
                       onPressed: () {
                         videoJsController.isFullScreen((val) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -573,6 +594,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
+                          style: btnStyle,
                       onPressed: () {
                         videoJsController.requestFullScreen();
                       },
@@ -584,6 +606,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     width: 5,
                   ),
                   ElevatedButton(
+                          style: btnStyle,
                       onPressed: () {
                         videoJsController.exitFullScreen();
                       },
@@ -601,8 +624,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
+                          style: btnStyle,
                       onPressed: () {
-                        videoJsController.setTime(100);
+                      
                       },
                       child: const Text(
                         'Set video time to 100 sec',
@@ -612,6 +636,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     width: 5,
                   ),
                   ElevatedButton(
+                          style: btnStyle,
                       onPressed: () {
                         videoJsController.durationTime((val) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -636,6 +661,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
+                          style: btnStyle,
                       onPressed: () {
                         videoJsController.remainTime((val) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -654,6 +680,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     width: 5,
                   ),
                   ElevatedButton(
+                          style: btnStyle,
                       onPressed: () {
                         videoJsController.bufferPercent((val) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -678,6 +705,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
+                          style: btnStyle,
                       onPressed: () {
                         videoJsController.setPoster(
                             'https://file-examples-com.github.io/uploads/2017/10/file_example_JPG_100kB.jpg');
@@ -690,6 +718,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     width: 5,
                   ),
                   ElevatedButton(
+                          style: btnStyle,
                       onPressed: () {
                         videoJsController.getPoster((val) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(

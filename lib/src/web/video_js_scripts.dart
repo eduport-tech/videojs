@@ -3,15 +3,19 @@ class VideoJsScripts {
     String playerId,
     Map<String, dynamic>? options, {
     bool qualitySelector = false,
-  }) =>
-      """
+
+  }) {
+    double startAt = options?['startTime'] ?? 0;
+    return """
     var player = videojs('$playerId', $options,function() {
+    player.currentTime($startAt);
     callBackToDartSide('$playerId', 'onReady' , 'true');
     });
     ${qualitySelector ? """player.hlsQualitySelector({
       displayCurrentQuality: true,
     });""" : ""}
     """;
+  }
 
   String globalAutoSetup(bool status) => """
     videojs.options.autoSetup = '$status';""";
@@ -45,14 +49,16 @@ class VideoJsScripts {
 
   String dispose(String playerId) => """
     var player = videojs.getPlayer('$playerId');
-    if(!player.isDisposed()){ player.dispose();}""";
+     player.dispose();""";
 
   // String isDispose(String playerId) => """
   //   '$playerId'.isDisposed();""";
 
-  String setSRCCode(String playerId, String src, String type) => """
+String setSRCCode(String playerId, String src, String type, {double? startTime}) => """
     var player = videojs.getPlayer('$playerId');
-    player.src({type: '$type', src: '$src'});""";
+    player.src({type: '$type', src: '$src'});
+    ${startTime != null ? "player.currentTime($startTime);" : ""}
+""";
 
   //Array of Source Objects: To provide multiple versions of the source so that it can be played
   //using HTML5 across browsers you can use an array of source objects. Video.js will detect which

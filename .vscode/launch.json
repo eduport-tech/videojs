@@ -11,7 +11,7 @@
             "type": "dart",
             "flutterMode": "debug",
             "args": [
-                "--wasm",
+                // "--wasm",
                 "--web-browser-flag=--disable-web-security",
                 "--web-port",
                 "8000",
